@@ -78,3 +78,12 @@ miss_bool = data['Outlet_Size'].isnull()
 print('\noriginal #missing: %d'%sum(miss_bool))
 data.loc[miss_bool, 'Outlet_Size'] = data.loc[miss_bool, 'Outlet_Type'].apply(lambda x: outlet_size_mode[x])
 print(sum(data['Outlet_Size'].isnull()))
+
+
+"""
+4.FEATURE ENGINEERING
+making the data ready for analysis,Create some new variable using the old ones"""
+
+#Step 1: Consider combining outlet type
+
+data.pivot_table(values = 'Item_Outlet_Sales',index = 'Outlet_Type')
