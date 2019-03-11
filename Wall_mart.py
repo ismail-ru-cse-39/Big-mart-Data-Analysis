@@ -57,4 +57,24 @@ print('Original #missing: %d'%sum(miss_bool))
 data.loc[miss_bool,'Item_Weight'] = data.loc[miss_bool,'Item_Identifier'].apply(lambda x: item_avg_weight.at[x,'Item_Weight'])
 
 print('Final #missing: %d'% sum(data['Item_Weight'].isnull()))
-      
+
+#Impute outlet_size
+
+from scipy.stats import mode
+
+
+#Determinig the mode for each
+#outlet_size_mode = data.pivot_table(values = 'Outlet_Size', columns = 'Outlet_Type', aggfunc = (lambda x:mode(x).mode[0]))
+outlet_size_mode = data.pivot_table(values='Outlet_Size', columns='Outlet_Type',aggfunc=(lambda x:x.mode().iat[0]) )
+print('Mode for each Outlet_Type:')
+print(outlet_size_mode)  
+
+
+#get the boolean variable
+
+miss_bool = data['Outlet_Size'].isnull()
+
+#Impute data and check missing values
+print('\noriginal #missing: %d'%sum(miss_bool))
+data.loc[miss_bool, 'Outlet_Size'] = data.loc[miss_bool, 'Outlet_Type'].apply(lambda x: outlet_size_mode[x])
+print(sum(data['Outlet_Size'].isnull()))
