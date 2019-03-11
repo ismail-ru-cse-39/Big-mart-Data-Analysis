@@ -46,6 +46,15 @@ for col in categorical_columns:
 item_avg_weight = data.pivot_table(values = 'Item_Weight', index = 'Item_Identifier')
 
 #Get a boolean variable for missing Item_Weight value
+
 miss_bool = data['Item_Weight'].isnull()
 
 #Imoute data and check missing values before and after imputation to confirm
+print()
+print('Original #missing: %d'%sum(miss_bool))
+
+#data.loc[miss_bool,'Item_Weight'] = data.loc[miss_bool,'Item_Identifier'].apply(lambda x: item_avg_weight[x])
+data.loc[miss_bool,'Item_Weight'] = data.loc[miss_bool,'Item_Identifier'].apply(lambda x: item_avg_weight.at[x,'Item_Weight'])
+
+print('Final #missing: %d'% sum(data['Item_Weight'].isnull()))
+      
