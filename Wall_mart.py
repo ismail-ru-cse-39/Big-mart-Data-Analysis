@@ -87,3 +87,20 @@ making the data ready for analysis,Create some new variable using the old ones""
 #Step 1: Consider combining outlet type
 
 data.pivot_table(values = 'Item_Outlet_Sales',index = 'Outlet_Type')
+
+
+#Step 2: modify th e item visibility
+#here minimum value is 0 so impute it with mean visibility of that product
+
+#average visibility of a product
+visibility_avg = data.pivot_table(values = 'Item_Visibility', index = 'Item_Identifier')
+
+#impute 0 values with mean visibility of the product
+miss_bool = (data['Item_Visibility'] == 0)
+
+#print number of 0
+print('\nNumber of 0 values initially: %d'%sum(miss_bool))
+
+#impute mean visibility
+data.loc[miss_bool,'Item_Visibility'] = data.loc[miss_bool,'Item_Identifier'].apply(lambda x: visibility_avg.at[x,'Item_Visibility'])
+print('Number of 0 values after modification: %d'%sum(data['Item_Visibility'] == 0))
