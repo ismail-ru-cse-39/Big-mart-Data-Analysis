@@ -125,3 +125,33 @@ data['Item_Type_Combined'] = data['Item_Type_Combined'].map({'FD': 'Food',
     
 print()
 print(data['Item_Type_Combined'].value_counts())
+
+
+#Step 4: DETERMINE THE YEAR OF OPERATION OF A STORE
+
+"""We wanted to make a new column depicting the years of operation of a store"""
+
+#years
+data['Outlet_Years'] = 2013 - data['Outlet_Establishment_Year']
+
+print()
+print(data['Outlet_Years'].describe())
+
+#Step 5: MODIFY CATEGORIES OF ITEM_FAT_CONTENT
+"""We found typos and difference in representation in categories 
+of Item_Fat_Content variable. 
+This can be corrected as"""
+
+#change categories of low fat:
+
+print()
+print('Original categories: ')
+print(data['Item_Fat_Content'].value_counts())
+
+data['Item_Fat_Content'] = data['Item_Fat_Content'].replace({'LF': 'Low Fat',
+    'reg': 'Regular',
+    'low fat': 'Low Fat'})
+
+print()
+print('Modified categories: ')
+print(data['Item_Fat_Content'].value_counts())
