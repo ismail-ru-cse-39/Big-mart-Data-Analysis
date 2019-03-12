@@ -183,3 +183,34 @@ var_mod = ['Item_Fat_Content','Outlet_Location_Type','Outlet_Size','Item_Type_Co
 le = LabelEncoder()
 for i in var_mod:
     data[i] = le.fit_transform(data[i])
+
+#one hot coding
+data = pd.get_dummies(data, columns = ['Item_Fat_Content','Outlet_Location_Type',
+                                       'Outlet_Size','Outlet_Type', 
+                                       'Item_Type_Combined', 'Outlet'])
+
+print()
+print(data.dtypes)
+
+print(data[['Item_Fat_Content_0','Item_Fat_Content_1','Item_Fat_Content_2']].head(10))
+ 
+
+#Step 7:EXPORTING DATA
+"""Final step is to convert data back into train
+ and test data sets. Its generally a good idea to export both of these 
+as modified data sets so that they can be re-used for multiple sessions"""
+
+#Drop the columns which have been converted to different type
+data.drop(['Item_Type','Outlet_Establishment_Year'],axis=1,inplace=True)
+
+#divide into test and train
+train = data.loc[data['source'] == "train"]
+test = data.loc[data['source'] == "test"]
+
+#drop unnecessary columns
+test.drop(['Item_Outlet_Sales','source'],axis = 1,inplace = True)
+train.drop(['source'],axis=1,inplace=True)
+
+#Export files as modified version
+train.to_csv("train_modified.csv",index = False)
+test.to_csv("test_modified.csv",index = False)   
