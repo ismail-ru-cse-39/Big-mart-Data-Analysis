@@ -111,3 +111,17 @@ print('Number of 0 values after modification: %d'%sum(data['Item_Visibility'] ==
 data['Item_Visibility_MeanRatio'] = data.apply(lambda x: x['Item_Visibility']/visibility_avg.loc[x['Item_Identifier']], axis=1)
 
 print(data['Item_Visibility_MeanRatio'].describe())
+
+
+#Step 3: CREATE A BROAD CATEGORY OF ITEM
+
+#Get the first two characters of ID:
+data['Item_Type_Combined'] = data['Item_Identifier'].apply(lambda x: x[0:2])
+
+#Rename them to more intuitive categories
+data['Item_Type_Combined'] = data['Item_Type_Combined'].map({'FD': 'Food',
+    'NC': 'Non-Consumable',
+    'DR' : 'Drinks'})
+    
+print()
+print(data['Item_Type_Combined'].value_counts())
