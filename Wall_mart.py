@@ -104,3 +104,10 @@ print('\nNumber of 0 values initially: %d'%sum(miss_bool))
 #impute mean visibility
 data.loc[miss_bool,'Item_Visibility'] = data.loc[miss_bool,'Item_Identifier'].apply(lambda x: visibility_avg.at[x,'Item_Visibility'])
 print('Number of 0 values after modification: %d'%sum(data['Item_Visibility'] == 0))
+
+
+
+#Determine another variable with means ratio
+data['Item_Visibility_MeanRatio'] = data.apply(lambda x: x['Item_Visibility']/visibility_avg.loc[x['Item_Identifier']], axis=1)
+
+print(data['Item_Visibility_MeanRatio'].describe())
