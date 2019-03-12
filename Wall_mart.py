@@ -160,3 +160,26 @@ print(data['Item_Fat_Content'].value_counts())
 data.loc[data['Item_Type_Combined'] == "Non-Consumable",'Item_Fat_Content'] = "Non_Edible"
 print()
 print(data['Item_Fat_Content'].value_counts())
+
+
+#Step 6: NUMERICAL AND ONE-HOT CODING OF CATEGORICAL VARIABLES
+"""Since scikit-learn accepts only numerical variables,
+ I converted all categories of nominal variables into 
+ numeric types. Also, I wanted Outlet_Identifier as a
+ variable as well. So I created a new variable ‘Outlet’
+ same as Outlet_Identifier and coded that. Outlet_Identifier
+ should remain as it is, 
+because it will be required in the submission file."""
+
+#Importe library
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+
+#new variable for outlet
+data['Outlet'] = le.fit_transform(data['Outlet_Identifier'])
+
+var_mod = ['Item_Fat_Content','Outlet_Location_Type','Outlet_Size','Item_Type_Combined','Outlet_Type','Outlet']
+le = LabelEncoder()
+for i in var_mod:
+    data[i] = le.fit_transform(data[i])
