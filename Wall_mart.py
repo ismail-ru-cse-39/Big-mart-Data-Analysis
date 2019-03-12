@@ -155,3 +155,8 @@ data['Item_Fat_Content'] = data['Item_Fat_Content'].replace({'LF': 'Low Fat',
 print()
 print('Modified categories: ')
 print(data['Item_Fat_Content'].value_counts())
+
+#make non-consumable low fat as a separate category in low_fat
+data.loc[data['Item_Type_Combined'] == "Non-Consumable",'Item_Fat_Content'] = "Non_Edible"
+print()
+print(data['Item_Fat_Content'].value_counts())
