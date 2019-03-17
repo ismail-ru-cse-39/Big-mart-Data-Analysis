@@ -208,7 +208,9 @@ train = data.loc[data['source'] == "train"]
 test = data.loc[data['source'] == "test"]
 
 #drop unnecessary columns
+test.is_copy = None
 test.drop(['Item_Outlet_Sales','source'],axis = 1,inplace = True)
+train.is_copy = None
 train.drop(['source'],axis=1,inplace=True)
 
 #Export files as modified version
@@ -230,6 +232,7 @@ mean_sales = train['Item_Outlet_Sales'].mean()
 
 #define a dataframe with IDs for submission:
 base1 = test[['Item_Identifier','Outlet_Identifier']]
+base1.is_copy = None
 base1['Item_Outlet_Sales'] = mean_sales
 
 #Export submission file
@@ -245,7 +248,7 @@ base1.to_csv("alg0.csv", index = False)
 target = 'Item_Outlet_Sales'
 IDcol = ['Item_Identifier','Outlet_Identifier']
 
-from sklearn import cross_validation, metrics
+from sklearn import metrics,model_selection
 
 def modelfit(alg, dtrain, dtest, predictors, target, IDcol, filename):
     #fit the algorithm on the data
@@ -255,7 +258,7 @@ def modelfit(alg, dtrain, dtest, predictors, target, IDcol, filename):
     dtrain_predictions = alg.predict(dtrain[predictors])
     
     #perform cross validation
-    cv_score = cross_validation.cross_val_score(alg, dtrain[predictors], dtrain[target], cv = 20, scoring = 'mean_squared_error')
+    cv_score = model_selection.cross_val_score(alg, dtrain[predictors], dtrain[target], cv = 20, scoring = 'mean_squared_error')
     cv_score = np.sqrt(np.abs(cv_score))
     
     #print model report:
@@ -274,5 +277,5 @@ def modelfit(alg, dtrain, dtest, predictors, target, IDcol, filename):
     
     submission.to_csv(filename,index = False)
     
-    
+
 
