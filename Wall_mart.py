@@ -232,6 +232,9 @@ mean_sales = train['Item_Outlet_Sales'].mean()
 base1 = test[['Item_Identifier','Outlet_Identifier']]
 base1['Item_Outlet_Sales'] = mean_sales
 
+#Export submission file
+base1.to_csv("alg0.csv", index = False)
+
 #print('\n\nMean slaes values:\n ')
 #print(base1['Item_Outlet_Sales'])
 
@@ -239,4 +242,37 @@ base1['Item_Outlet_Sales'] = mean_sales
 #MAKE THE GENERIC FUNCTION
 
 #define target and id column
+target = 'Item_Outlet_Sales'
+IDcol = ['Item_Identifier','Outlet_Identifier']
+
+from sklearn import cross_validation, metrics
+
+def modelfit(alg, dtrain, dtest, predictors, target, IDcol, filename):
+    #fit the algorithm on the data
+    alg.fit(dtrain[predictors], dtrain[target])
+    
+    #predict training set
+    dtrain_predictions = alg.predict(dtrain[predictors])
+    
+    #perform cross validation
+    cv_score = cross_validation.cross_val_score(alg, dtrain[predictors], dtrain[target], cv = 20, scoring = 'mean_squared_error')
+    cv_score = np.sqrt(np.abs(cv_score))
+    
+    #print model report:
+    print('\n\nPrint model report')
+    print('RMSE : %.4g'% np.sqrt(metrics.mean_squared_error(dtrain[target].values, dtrain_predictions)))
+    
+    print('\nCV score: Mean - %.4g | Std - %.4g | Min - %.4g | Max - %.4g' %(np.mean(cv_score), np.std(cv_score), np.min(cv_score), np.max(cv_score)))
+    
+    #Predict on testing data
+    dtest[target] = alg.predict(dtest[predictors])
+    
+    #export submission file:
+    IDcol.append(target)
+    
+    submission = pd.DataFrame({x : dtest[x] for x in IDcol})
+    
+    submission.to_csv(filename,index = False)
+    
+    
 
