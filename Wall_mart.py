@@ -214,3 +214,29 @@ train.drop(['source'],axis=1,inplace=True)
 #Export files as modified version
 train.to_csv("train_modified.csv",index = False)
 test.to_csv("test_modified.csv",index = False)   
+
+
+
+
+
+
+#4.MODEL BUILDING
+
+
+#BASELINE MODEL
+
+#Mean based:
+mean_sales = train['Item_Outlet_Sales'].mean()
+
+#define a dataframe with IDs for submission:
+base1 = test[['Item_Identifier','Outlet_Identifier']]
+base1['Item_Outlet_Sales'] = mean_sales
+
+#print('\n\nMean slaes values:\n ')
+#print(base1['Item_Outlet_Sales'])
+
+
+#MAKE THE GENERIC FUNCTION
+
+#define target and id column
+
