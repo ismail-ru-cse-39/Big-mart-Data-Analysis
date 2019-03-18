@@ -292,6 +292,14 @@ modelfit(alg1, train, test, predictors, target, IDcol, 'alg1.csv')
 coef1 = pd.Series(alg1.coef_, predictors).sort_values()
 coef1.plot(kind = 'bar', title = 'Model Coefficients')
 
+
+#RIDGE REGRESSION MODEL
+predictors = [x for x in train.columns if x not in [target]+IDcol]
+alg2 = Ridge(alpha=0.05,normalize=True)
+modelfit(alg2, train, test, predictors, target, IDcol, 'alg2.csv')
+coef2 = pd.Series(alg2.coef_, predictors).sort_values()
+coef2.plot(kind='bar', title='Model Coefficients')
+
     
 
 
