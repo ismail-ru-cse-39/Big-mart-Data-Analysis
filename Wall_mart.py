@@ -276,6 +276,19 @@ def modelfit(alg, dtrain, dtest, predictors, target, IDcol, filename):
     submission = pd.DataFrame({x : dtest[x] for x in IDcol})
     
     submission.to_csv(filename,index = False)
+
+
+#LINEAR REGRESSION MODEL
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
+predictors = [x for x in train.columns if x not in [target]+IDcol]
+
+#print predictors
+alg1 = LinearRegression(normalize = True)
+modelfit(alg1, train, test, predictors, target, IDcol, 'alg1.csv')
+
+coef1 = pd.Series(alg1.coef_, predictors).sort_values()
+coef1.plot(kind = 'bar', title = 'Model Coefficients')
+
     
 
 
