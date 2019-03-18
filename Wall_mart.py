@@ -248,7 +248,10 @@ base1.to_csv("alg0.csv", index = False)
 target = 'Item_Outlet_Sales'
 IDcol = ['Item_Identifier','Outlet_Identifier']
 
-from sklearn import metrics,model_selection
+from sklearn.model_selection import cross_validate
+from sklearn import metrics
+from sklearn.model_selection import cross_val_score
+
 
 def modelfit(alg, dtrain, dtest, predictors, target, IDcol, filename):
     #fit the algorithm on the data
@@ -258,7 +261,7 @@ def modelfit(alg, dtrain, dtest, predictors, target, IDcol, filename):
     dtrain_predictions = alg.predict(dtrain[predictors])
     
     #perform cross validation
-    cv_score = model_selection.cross_val_score(alg, dtrain[predictors], dtrain[target], cv = 20, scoring = 'mean_squared_error')
+    cv_score = cross_val_score(alg, dtrain[predictors], dtrain[target], cv = 20, scoring = 'neg_mean_squared_error')
     cv_score = np.sqrt(np.abs(cv_score))
     
     #print model report:
